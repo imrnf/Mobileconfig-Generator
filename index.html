@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <title>Mobileconfig Generator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f2f2f7;
+            color: #1c1c1e;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .main-wrapper {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .header-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .header-desc {
+            text-align: center;
+            font-size: 14px;
+            color: #8e8e93;
+            line-height: 1.4;
+            margin: 0;
+        }
+        .section-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-desc {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #3a3a3c;
+        }
+        .note-inline {
+            font-size: 12px;
+            color: #8e8e93;
+            font-weight: normal;
+            margin-left: 4px;
+        }
+        input[type="text"], input[type="password"], select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #c7c7cc;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+            background-color: #fff;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        input::placeholder {
+            color: #c7c7cc;
+        }
+        select {
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231c1c1e%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px top 50%;
+            background-size: 12px auto;
+        }
+        .divider {
+            height: 1px;
+            background-color: #e5e5ea;
+            margin: 20px 0;
+        }
+        button {
+            width: 100%;
+            background-color: #5e5ce6; 
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        button:hover {
+            background-color: #4b49b8;
+        }
+    </style>
+</head>
+<body onload="initApp()">
+
+<div class="main-wrapper">
+
+    <!-- CARD 1: HEADER -->
+    <div class="container" style="padding-bottom: 25px;">
+        <h1 class="header-title">⚙️ Mobileconfig Generator</h1>
+        <p class="header-desc">Create iOS configuration profiles (.mobileconfig) for DNS, and VPN settings. Compatible with iPhone, iPad, and Mac.</p>
+    </div>
+
+    <!-- CARD 2: FORM -->
+    <div class="container">
+        
+        <div class="form-group" style="margin-bottom: 5px;">
+            <label style="color: #5e5ce6; font-size: 15px;">Pilih Jenis Konfigurasi</label>
+            <select id="mainConfigType" onchange="toggleMainMode()" style="border: 2px solid #5e5ce6; font-weight: bold; color: #5e5ce6;">
+                <option value="DNS">DNS Configuration</option>
+                <option value="VPN">VPN Configuration</option>
+            </select>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- DNS SECTION -->
+        <div id="dnsSection">
+            <div class="section-header">🌐 DNS Configuration</div>
+            <div class="section-desc">Configure encrypted DNS (DoH/DoT) for enhanced privacy on iOS 14+</div>
+            <div class="divider" style="margin-top:-5px;"></div>
+
+            <div class="form-group">
+                <label>Profile Name</label>
+                <input type="text" id="dnsProfileName" placeholder="Secure DNS">
+            </div>
+
+            <div class="form-group" style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label>Organization</label>
+                    <input type="text" id="dnsOrgName" placeholder="My Organization">
+                </div>
+                <div style="flex: 1;">
+                    <label>Setting Name</label>
+                    <input type="text" id="dnsSettingName" placeholder="Secure DNS">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>DNS Protocol</label>
+                <select id="dnsProtocol" onchange="toggleDNSProtocol()">
+                    <option value="HTTPS">DNS-over-HTTPS (DoH)</option>
+                    <option value="TLS">DNS-over-TLS (DoT)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label id="dnsServerLabel">DoH Server URL</label>
+                <input type="text" id="dnsServerUrl" placeholder="https://dns.example.com/dns-query">
+            </div>
+
+            <div class="form-group">
+                <label>Fallback IPv4 <span class="note-inline">(Optional)</span></label>
+                <input type="text" id="dnsIpv4" placeholder="1.1.1.1">
+            </div>
+
+            <div class="form-group">
+                <label>Fallback IPv6 <span class="note-inline">(Optional)</span></label>
+                <input type="text" id="dnsIpv6" placeholder="2606:4700:4700::1111">
+            </div>
+
+            <button onclick="generateDNSProfile()">⚡ Generate DNS Profile</button>
+        </div>
+
+        <!-- VPN SECTION -->
+        <div id="vpnSection" style="display: none;">
+            <div class="section-header">🔐 VPN Configuration</div>
+            <div class="section-desc">Set up L2TP/IPSec or IKEv2 VPN connection on iOS devices</div>
+            <div class="divider" style="margin-top:-5px;"></div>
+
+            <div class="form-group">
+                <label>Profile Name</label>
+                <input type="text" id="vpnProfileName" placeholder="My VPN">
+            </div>
+
+            <div class="form-group" style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label>Organization</label>
+                    <input type="text" id="vpnOrgName" placeholder="My Organization">
+                </div>
+                <div style="flex: 1;">
+                    <label>Setting Name</label>
+                    <input type="text" id="vpnSettingName" placeholder="My VPN">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>VPN Type</label>
+                <select id="vpnType" onchange="toggleVPNFields()">
+                    <option value="L2TP" selected>L2TP/IPSec</option>
+                    <option value="IKEv2">IKEv2</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Server Address</label>
+                <input type="text" id="vpnServerAddress" placeholder="vpn.example.com">
+            </div>
+
+            <div class="form-group" id="vpnRemoteIdGroup">
+                <label>Remote ID <span class="note-inline">(IKEv2)</span></label>
+                <input type="text" id="vpnRemoteId" placeholder="vpn.example.com">
+            </div>
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="vpnUsername" placeholder="user@example.com">
+            </div>
+
+            <div class="form-group">
+                <label>Shared Secret <span class="note-inline">(L2TP)</span></label>
+                <input type="password" id="vpnSharedSecret" placeholder="........">
+            </div>
+
+            <button onclick="generateVPNProfile()">⚡ Generate VPN Profile</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function initApp() {
+        toggleMainMode();
+        toggleDNSProtocol();
+        toggleVPNFields();
+    }
+
+    function toggleMainMode() {
+        const mode = document.getElementById('mainConfigType').value;
+        if (mode === 'DNS') {
+            document.getElementById('dnsSection').style.display = 'block';
+            document.getElementById('vpnSection').style.display = 'none';
+        } else {
+            document.getElementById('dnsSection').style.display = 'none';
+            document.getElementById('vpnSection').style.display = 'block';
+        }
+    }
+
+    function toggleDNSProtocol() {
+        const proto = document.getElementById('dnsProtocol').value;
+        const label = document.getElementById('dnsServerLabel');
+        const input = document.getElementById('dnsServerUrl');
+
+        if (proto === 'HTTPS') {
+            label.innerText = 'DoH Server URL';
+            input.placeholder = 'https://dns.example.com/dns-query';
+        } else {
+            label.innerText = 'DoT Server Hostname';
+            input.placeholder = 'dns.example.com';
+        }
+    }
+
+    function toggleVPNFields() {
+        const vpnType = document.getElementById('vpnType').value;
+        const remoteGrp = document.getElementById('vpnRemoteIdGroup');
+        
+        if (vpnType === 'IKEv2') {
+            remoteGrp.style.display = 'block';
+        } else {
+            remoteGrp.style.display = 'none';
+        }
+    }
+
+    function getValueWithFallback(id) {
+        const el = document.getElementById(id);
+        return el.value.trim() || el.placeholder;
+    }
+
+    // ==============================================
+    // GENERATE DNS
+    // ==============================================
+    function generateDNSProfile() {
+        const profileName = getValueWithFallback('dnsProfileName');
+        const orgName = getValueWithFallback('dnsOrgName');
+        const settingName = getValueWithFallback('dnsSettingName');
+        const protocol = document.getElementById('dnsProtocol').value;
+        const serverUrl = getValueWithFallback('dnsServerUrl');
+        
+        const ipv4 = document.getElementById('dnsIpv4').value.trim();
+        const ipv6 = document.getElementById('dnsIpv6').value.trim();
+
+        const uuid1 = crypto.randomUUID().toUpperCase();
+        const uuid2 = crypto.randomUUID().toUpperCase();
+        const identifierBase = "com.customdns." + Date.now();
+
+        let serverAddressesStr = "";
+        if (ipv4 || ipv6) {
+            serverAddressesStr += "<key>ServerAddresses</key>\n                <array>\n";
+            if (ipv4) serverAddressesStr += `                    <string>${ipv4}</string>\n`;
+            if (ipv6) serverAddressesStr += `                    <string>${ipv6}</string>\n`;
+            serverAddressesStr += "                </array>";
+        }
+
+        let protocolStr = "";
+        if (protocol === "HTTPS") {
+            protocolStr = `<key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerURL</key>
+                <string>${serverUrl}</string>`;
+        } else {
+            protocolStr = `<key>DNSProtocol</key>
+                <string>TLS</string>
+                <key>ServerName</key>
+                <string>${serverUrl}</string>`;
+        }
+
+        const plistContent = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                ${protocolStr}
+                ${serverAddressesStr}
+            </dict>
+            <key>PayloadDescription</key>
+            <string>Configures DNS settings</string>
+            <key>PayloadDisplayName</key>
+            <string>${settingName}</string>
+            <key>PayloadIdentifier</key>
+            <string>${identifierBase}.payload.${uuid1}</string>
+            <key>PayloadOrganization</key>
+            <string>${orgName}</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>${uuid1}</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+    </array>
+    <key>PayloadDisplayName</key>
+    <string>${profileName}</string>
+    <key>PayloadIdentifier</key>
+    <string>${identifierBase}.${uuid2}</string>
+    <key>PayloadOrganization</key>
+    <string>${orgName}</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>${uuid2}</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>`;
+
+        downloadMobileConfig(plistContent, profileName, 'DNS');
+    }
+
+    // ==============================================
+    // GENERATE VPN
+    // ==============================================
+    function generateVPNProfile() {
+        const profileName = getValueWithFallback('vpnProfileName');
+        const orgName = getValueWithFallback('vpnOrgName');
+        const settingName = getValueWithFallback('vpnSettingName');
+        const vpnType = document.getElementById('vpnType').value;
+        const serverAddress = getValueWithFallback('vpnServerAddress');
+        const remoteId = getValueWithFallback('vpnRemoteId');
+        const username = getValueWithFallback('vpnUsername');
+        
+        // Jika password kosong, sistem tetap pakai fallback aman "12345678" agar tidak crash
+        const sharedSecret = document.getElementById('vpnSharedSecret').value || "12345678";
+
+        const uuid1 = crypto.randomUUID().toUpperCase();
+        const uuid2 = crypto.randomUUID().toUpperCase();
+        const identifierBase = "com.customvpn." + Date.now();
+
+        let vpnPayloadContent = "";
+
+        if (vpnType === "L2TP") {
+            const secretBase64 = btoa(unescape(encodeURIComponent(sharedSecret)));
+            vpnPayloadContent = `
+            <key>IPSec</key>
+            <dict>
+                <key>AuthenticationMethod</key>
+                <string>SharedSecret</string>
+                <key>SharedSecret</key>
+                <data>${secretBase64}</data>
+            </dict>
+            <key>PPP</key>
+            <dict>
+                <key>AuthName</key>
+                <string>${username}</string>
+                <key>CommRemoteAddress</key>
+                <string>${serverAddress}</string>
+            </dict>
+            <key>VPNSubType</key>
+            <string>net.l2tp</string>
+            <key>VPNType</key>
+            <string>L2TP</string>
+            <key>UserDefinedName</key>
+            <string>${settingName}</string>`;
+        } else if (vpnType === "IKEv2") {
+            vpnPayloadContent = `
+            <key>IKEv2</key>
+            <dict>
+                <key>AuthenticationMethod</key>
+                <string>None</string>
+                <key>IKESecurityAssociationParameters</key>
+                <dict>
+                    <key>DiffieHellmanGroup</key>
+                    <integer>14</integer>
+                    <key>EncryptionAlgorithm</key>
+                    <string>AES-256</string>
+                    <key>IntegrityAlgorithm</key>
+                    <string>SHA2-256</string>
+                </dict>
+                <key>LocalIdentifier</key>
+                <string>${username}</string>
+                <key>RemoteAddress</key>
+                <string>${serverAddress}</string>
+                <key>RemoteIdentifier</key>
+                <string>${remoteId}</string>
+            </dict>
+            <key>VPNSubType</key>
+            <string>net.ikev2</string>
+            <key>VPNType</key>
+            <string>IKEv2</string>
+            <key>UserDefinedName</key>
+            <string>${settingName}</string>`;
+        }
+
+        const plistContent = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            ${vpnPayloadContent}
+            <key>PayloadDescription</key>
+            <string>Configures VPN settings</string>
+            <key>PayloadDisplayName</key>
+            <string>${settingName}</string>
+            <key>PayloadIdentifier</key>
+            <string>${identifierBase}.payload.${uuid1}</string>
+            <key>PayloadOrganization</key>
+            <string>${orgName}</string>
+            <key>PayloadType</key>
+            <string>com.apple.vpn.managed</string>
+            <key>PayloadUUID</key>
+            <string>${uuid1}</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+    </array>
+    <key>PayloadDisplayName</key>
+    <string>${profileName}</string>
+    <key>PayloadIdentifier</key>
+    <string>${identifierBase}.${uuid2}</string>
+    <key>PayloadOrganization</key>
+    <string>${orgName}</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>${uuid2}</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>`;
+
+        downloadMobileConfig(plistContent, profileName, 'VPN');
+    }
+
+    // ==============================================
+    // FUNGSI DOWNLOAD
+    // ==============================================
+    function downloadMobileConfig(content, filenameBase, type) {
+        const blob = new Blob([content], { type: 'application/x-apple-aspen-config' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${filenameBase.replace(/[^a-zA-Z0-9]/g, '_')}_${type}.mobileconfig`;
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 100);
+    }
+</script>
+
+</body>
+</html>
