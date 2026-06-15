@@ -35,3 +35,38 @@ Capek bikin file `.mobileconfig` manual pakai XML? **Mobileconfig-Generator** bi
 ---
 
 ## 🚀 Quick Start
+1️⃣  Buka → https://imrnf.github.io/Mobileconfig-Generator
+2️⃣  Pilih jenis konfigurasi: DNS atau VPN
+3️⃣  Isi detail profil sesuai kebutuhanmu
+4️⃣  Klik "Generate Profile" ⚡
+5️⃣  Install ke iPhone/iPad kamu — done! ✅
+---
+
+## 📦 Yang Didukung
+
+| 🔧 Tipe | 📡 Protokol |
+|:---:|:---|
+| **DNS** | DNS-over-HTTPS (DoH) • DNS-over-TLS (DoT) |
+| **VPN** | L2TP/IPSec • IKEv2 |
+
+---
+
+## ⚠️ Catatan
+
+File `.mobileconfig` berisi konfigurasi sensitif (kredensial, server). Selalu cek isi profil sebelum install, dan jangan share file hasil generate ke pihak yang tidak dipercaya.
+
+---
+
+## 🤝 Kontribusi
+
+Found a bug? Punya ide fitur baru? PR & issue selalu welcome! 🙌
+
+---
+
+<div align="center">
+
+**📄 Licensed under MIT** — Free to use, modify & share
+
+Made with ❤️ by [imrnf](https://github.com/imrnf)
+
+</div>
