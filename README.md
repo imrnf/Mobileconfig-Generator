@@ -69,6 +69,4 @@ Found a bug? Punya ide fitur baru? PR & issue selalu welcome! 🙌
 
 **📄 Licensed under MIT** — Free to use, modify & share
 
-Made with ❤️ by [imrnf](https://github.com/imrnf)
-
 </div>
