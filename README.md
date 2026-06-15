@@ -36,11 +36,11 @@ Capek bikin file `.mobileconfig` manual pakai XML? **Mobileconfig-Generator** bi
 
 ## 🚀 Quick Start
 
-1️⃣ Buka → [https://imrnf.github.io/Mobileconfig-Generator](https://imrnf.github.io/Mobileconfig-Generator)
-2️⃣ Pilih jenis konfigurasi: **DNS** atau **VPN**
-3️⃣ Isi detail profil sesuai kebutuhanmu
-4️⃣ Klik **"Generate Profile"** ⚡
-5️⃣ Install ke iPhone/iPad kamu — done! ✅
+> 1. Buka → [https://imrnf.github.io/Mobileconfig-Generator](https://imrnf.github.io/Mobileconfig-Generator)
+> 2. Pilih jenis konfigurasi: **DNS** atau **VPN**
+> 3. Isi detail profil sesuai kebutuhanmu
+> 4. Klik **"Generate Profile"** ⚡
+> 5. Install ke iPhone/iPad kamu — done! ✅
 
 ---
 
